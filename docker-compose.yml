@@ -18,6 +18,7 @@ services:
       - db
     environment:
       - FLASK_ENV=development
+      - FLASK_APP=app.py
       - DATABASE_URL=mysql+pymysql://flaskuser:flaskpassword@db:3306/flaskdb
 
 volumes:
