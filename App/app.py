@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
+import time
 
 app = Flask(__name__)
 
@@ -13,8 +14,19 @@ class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     task = db.Column(db.String(255), nullable=False)
 
-with app.app_context():
-    db.create_all()
+def init_db():
+    retries = 5
+    while retries:
+        try:
+            with app.app_context():
+                db.create_all()
+            break
+        except Exception as e:
+            retries -= 1
+            print(f'Database not ready, retrying... ({e})')
+            time.sleep(5)
+
+init_db()
 
 @app.route('/')
 def index():
