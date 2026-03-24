@@ -4,25 +4,16 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/omargriffin14/flask-docker-app.git'
-            }
-        }
-
-    stages {
-        stage('Clone Repository') {
-            steps {
-                git credentialsId: 'github-credentials',
+                git branch: 'main',
                     url: 'https://github.com/omargriffin14/flask-docker-app.git',
-                    branch: 'main'
+                    credentialsId: 'github-credentials'
             }
         }
-
         stage('Build Docker Image') {
             steps {
                 bat 'docker-compose build'
             }
         }
-
         stage('Deploy Containers') {
             steps {
                 bat 'docker-compose down'
@@ -33,7 +24,7 @@ pipeline {
 
     post {
         success {
-            echo 'Deployment successful! App is running at http://your-EC2-ip:5000'
+            echo 'Deployment successful! App is running at http://20.110.202.160:5000'
         }
         failure {
             echo 'Something went wrong. Check the logs above for errors.'
